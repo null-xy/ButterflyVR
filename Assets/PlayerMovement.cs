@@ -27,6 +27,8 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 LeftControllerVelocity;
     private Vector3 RightControllerVelocity;
     private Vector3 devicePosition;
+    private InputDevice deviceLeft;
+    private InputDevice deviceRight;
 
     //private Rigidbody body;
     // Start is called before the first frame update
@@ -38,14 +40,15 @@ public class PlayerMovement : MonoBehaviour
         //get rig
         rig = GetComponent<XROrigin>();
         //body = GetComponent<Rigidbody>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
         //get input device controller from self defined-XRNode
-        InputDevice deviceLeft = InputDevices.GetDeviceAtXRNode(inputSourceLeft);
-        InputDevice deviceRight = InputDevices.GetDeviceAtXRNode(inputSourceRight);
+        deviceLeft = InputDevices.GetDeviceAtXRNode(inputSourceLeft);
+        deviceRight = InputDevices.GetDeviceAtXRNode(inputSourceRight);
         //InputDevice deviceHead = InputDevices.GetDeviceAtXRNode(inputSourceHeadset);
         deviceLeft.TryGetFeatureValue(CommonUsages.primary2DAxis, out inputAxis);
         deviceLeft.TryGetFeatureValue(CommonUsages.primaryButton, out isPressed);
@@ -53,7 +56,10 @@ public class PlayerMovement : MonoBehaviour
         deviceLeft.TryGetFeatureValue(CommonUsages.deviceVelocity, out LeftControllerVelocity);
         deviceRight.TryGetFeatureValue(CommonUsages.deviceVelocity, out RightControllerVelocity);
         deviceLeft.TryGetFeatureValue(CommonUsages.devicePosition, out devicePosition);
+        
         //deviceHead.TryGetFeatureValue(CommonUsages.devicePosition, out devicePosition);
+        //XRBaseInteractable interactable = deviceLeft.GetComponent<XRBaseInteractable>();
+        //interactable.activated.AddListener();
     }
 
     private void FixedUpdate()
@@ -71,7 +77,7 @@ public class PlayerMovement : MonoBehaviour
         //Vector3 cameraRelative = rig.Camera.transform.position - devicePosition;
         //float dotProduct = Vector3.Dot(devicePosition.forward, cameraRelative.normalized);
         //Vector3 direction = headYaw * new Vector3(0, 0, cameraRelative.z);
-        Debug.Log("Text: " + angle.ToString());
+        //Debug.Log("Text: " + angle.ToString());
 
         OnFlap();
 
@@ -86,10 +92,21 @@ public class PlayerMovement : MonoBehaviour
             fallingSpeed = 0; 
         }
         //isPressed ||
+        if (RightControllerVelocity.y < -0.8)
+        {
+            deviceRight.SendHapticImpulse(0, 0.8f, 0.1f);
+            Debug.Log("Right Text: " + RightControllerVelocity.y.ToString());
+        }
+        if (LeftControllerVelocity.y < -0.8)
+        {
+            deviceLeft.SendHapticImpulse(0, 0.8f, 0.1f);
+            Debug.Log("Left Text: " + LeftControllerVelocity.y.ToString());
+        }
         if (RightControllerVelocity.y<-0.8 && LeftControllerVelocity.y<-0.8)
         {
             flapSpeed = -3.5f * (RightControllerVelocity.y + LeftControllerVelocity.y);
             fallingSpeed = 0;
+            //device.SendHapticImpulse(channel, amplitude, duration);
             //debugText.SetText(RightControllerVelocity.ToString());
         }
         if(flapSpeed > 0)
