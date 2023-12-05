@@ -7,10 +7,14 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float speed = 1;
-    public float gravity = -9.81f;
+    //[SerializeField] private TextMeshProUGUI debugText;
+    public float speed = 3;
+    //public float gravity = -9.81f;
+    public float gravity = -2.81f;
     // inputSource is the customized slot for devices
-    public XRNode inputSource;
+    public XRNode inputSourceLeft;
+    public XRNode inputSourceRight;
+    public XRNode inputSourceHeadset;
     public LayerMask groundLayer;
 
 
@@ -20,8 +24,13 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 inputAxis;
     private CharacterController character;
     private bool isPressed;
+    private Vector3 LeftControllerVelocity;
+    private Vector3 RightControllerVelocity;
+    private Vector3 devicePosition;
+
     //private Rigidbody body;
     // Start is called before the first frame update
+
     void Start()
     {
         //get character
@@ -35,41 +44,65 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         //get input device controller from self defined-XRNode
-        InputDevice device = InputDevices.GetDeviceAtXRNode(inputSource);
-        device.TryGetFeatureValue(CommonUsages.primary2DAxis, out inputAxis);
-        device.TryGetFeatureValue(CommonUsages.primaryButton, out isPressed);
+        InputDevice deviceLeft = InputDevices.GetDeviceAtXRNode(inputSourceLeft);
+        InputDevice deviceRight = InputDevices.GetDeviceAtXRNode(inputSourceRight);
+        //InputDevice deviceHead = InputDevices.GetDeviceAtXRNode(inputSourceHeadset);
+        deviceLeft.TryGetFeatureValue(CommonUsages.primary2DAxis, out inputAxis);
+        deviceLeft.TryGetFeatureValue(CommonUsages.primaryButton, out isPressed);
+        //get input device controller Velocity in vector 3
+        deviceLeft.TryGetFeatureValue(CommonUsages.deviceVelocity, out LeftControllerVelocity);
+        deviceRight.TryGetFeatureValue(CommonUsages.deviceVelocity, out RightControllerVelocity);
+        deviceLeft.TryGetFeatureValue(CommonUsages.devicePosition, out devicePosition);
+        //deviceHead.TryGetFeatureValue(CommonUsages.devicePosition, out devicePosition);
     }
 
     private void FixedUpdate()
     {
         CapsuleFollowHeadset();
         Quaternion headYaw = Quaternion.Euler(0, rig.Camera.transform.eulerAngles.y, 0);
-        Vector3 direction = headYaw * new Vector3(inputAxis.x, 0, inputAxis.y);
-        character.Move(direction * Time.fixedDeltaTime * speed);
+        //Vector3 direction = headYaw * new Vector3(inputAxis.x, 0, inputAxis.y);
+        float angle = Vector3.Angle(-rig.Camera.transform.forward, (devicePosition - rig.Camera.transform.position).normalized);
+        if (Mathf.Abs(angle) < 60f)
+        {
+            Vector3 direction = headYaw * new Vector3(inputAxis.x, 0, inputAxis.y);
+            character.Move(direction * Time.fixedDeltaTime * speed);
+            //float distance = Vector3.Distance(object1.transform.position, object2.transform.position);
+        }
+        //Vector3 cameraRelative = rig.Camera.transform.position - devicePosition;
+        //float dotProduct = Vector3.Dot(devicePosition.forward, cameraRelative.normalized);
+        //Vector3 direction = headYaw * new Vector3(0, 0, cameraRelative.z);
+        Debug.Log("Text: " + angle.ToString());
 
         OnFlap();
 
-        
+        //fly with direction 
+
+       
         //gravity
         bool isGround = IfGround();
-        if(isGround) 
+        
+        if (isGround) 
         { 
             fallingSpeed = 0; 
         }
-        if(isPressed)
+        //isPressed ||
+        if (RightControllerVelocity.y<-0.8 && LeftControllerVelocity.y<-0.8)
         {
-            flapSpeed = 15f;
+            flapSpeed = -3.5f * (RightControllerVelocity.y + LeftControllerVelocity.y);
             fallingSpeed = 0;
+            //debugText.SetText(RightControllerVelocity.ToString());
         }
-        //if(flapSpeed > 0)
-        //{
+        if(flapSpeed > 0)
+        {
             //flapSpeed -= gravity * Time.fixedDeltaTime;
-        //}
+            flapSpeed--;
+        }
         else 
         {
             fallingSpeed += gravity * Time.fixedDeltaTime; 
         }
         character.Move(Vector3.up * (fallingSpeed + flapSpeed) * Time.fixedDeltaTime);
+        //Debug.Log("Text: " + RightControllerVelocity.ToString());
     }
 
     void CapsuleFollowHeadset()

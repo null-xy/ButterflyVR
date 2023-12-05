@@ -319,9 +319,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1c2e988699b5f6458209c75e6bc67c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
-  gravity: -9.81
-  inputSource: 4
+  speed: 3
+  gravity: -2.81
+  inputSourceLeft: 4
+  inputSourceRight: 5
+  inputSourceHeadset: 3
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
