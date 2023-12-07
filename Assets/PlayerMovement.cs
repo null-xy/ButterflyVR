@@ -8,9 +8,10 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class PlayerMovement : MonoBehaviour
 {
     //[SerializeField] private TextMeshProUGUI debugText;
-    public float speed = 3;
+    public float speed = 5;
     //public float gravity = -9.81f;
     public float gravity = -2.81f;
+    public float flapPower = 3.5f;
     // inputSource is the customized slot for devices
     public XRNode inputSourceLeft;
     public XRNode inputSourceRight;
@@ -20,6 +21,8 @@ public class PlayerMovement : MonoBehaviour
 
     private float fallingSpeed;
     private float flapSpeed;
+    private float glidingSpeed;
+    private float flyBackSpeed;
     private XROrigin rig;
     private Vector2 inputAxis;
     private CharacterController character;
@@ -29,6 +32,9 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 devicePosition;
     private InputDevice deviceLeft;
     private InputDevice deviceRight;
+    //private float timer;
+    private Vector3 direction;
+    //private Rigidbody m_Rigidbody;
 
     //private Rigidbody body;
     // Start is called before the first frame update
@@ -40,7 +46,8 @@ public class PlayerMovement : MonoBehaviour
         //get rig
         rig = GetComponent<XROrigin>();
         //body = GetComponent<Rigidbody>();
-
+        glidingSpeed = 0f;
+        //m_Rigidbody = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -67,13 +74,23 @@ public class PlayerMovement : MonoBehaviour
         CapsuleFollowHeadset();
         Quaternion headYaw = Quaternion.Euler(0, rig.Camera.transform.eulerAngles.y, 0);
         //Vector3 direction = headYaw * new Vector3(inputAxis.x, 0, inputAxis.y);
-        float angle = Vector3.Angle(-rig.Camera.transform.forward, (devicePosition - rig.Camera.transform.position).normalized);
-        if (Mathf.Abs(angle) < 60f)
-        {
-            Vector3 direction = headYaw * new Vector3(inputAxis.x, 0, inputAxis.y);
-            character.Move(direction * Time.fixedDeltaTime * speed);
-            //float distance = Vector3.Distance(object1.transform.position, object2.transform.position);
-        }
+        //character.Move(direction * Time.fixedDeltaTime * speed);
+        //Vector3 direction = headYaw * new Vector3(0, 0, -RightControllerVelocity.z);
+        //character.Move(direction * Time.fixedDeltaTime * speed);
+        
+        //timer += Time.deltaTime;
+
+
+        /*
+        //glidingSpeed = Mathf.Max(glidingSpeed, 0);
+        
+        */
+        //character.Move(direction * Time.fixedDeltaTime * speed * glidingSpeed);
+
+        //float angle = Vector3.Angle(-rig.Camera.transform.forward, (devicePosition - rig.Camera.transform.position).normalized);
+        //float distance = Vector3.Distance(object1.transform.position, object2.transform.position);
+        //if (Mathf.Abs(angle) < 60f)
+
         //Vector3 cameraRelative = rig.Camera.transform.position - devicePosition;
         //float dotProduct = Vector3.Dot(devicePosition.forward, cameraRelative.normalized);
         //Vector3 direction = headYaw * new Vector3(0, 0, cameraRelative.z);
@@ -89,25 +106,63 @@ public class PlayerMovement : MonoBehaviour
         
         if (isGround) 
         { 
-            fallingSpeed = 0; 
+            fallingSpeed = 0f;
+            glidingSpeed = 0f;
+            flyBackSpeed = 0f;
+        }
+        if(!isGround)
+        {
+            if (RightControllerVelocity.z < -0.3 && LeftControllerVelocity.z < -0.3 && RightControllerVelocity.y < -0.8 && LeftControllerVelocity.y < -0.8)
+            {
+                glidingSpeed = 10f;
+                //m_Rigidbody.AddForce(transform.forward * 20f);
+                direction = headYaw * new Vector3(0, 0, -(RightControllerVelocity.z + LeftControllerVelocity.z));
+            }
+            //fly back code, does not work properly
+            /*if (RightControllerVelocity.z > 0.3 && LeftControllerVelocity.z > 0.3 && RightControllerVelocity.y < -0.8 && LeftControllerVelocity.y < -0.8)
+            {
+                flyBackSpeed = -5f;
+                if (glidingSpeed <= 0)
+                {
+                    direction = headYaw * new Vector3(0, 0, -(RightControllerVelocity.z + LeftControllerVelocity.z));
+                }
+                //m_Rigidbody.AddForce(transform.forward * 20f);
+                //direction = headYaw * new Vector3(0, 0, -(RightControllerVelocity.z + LeftControllerVelocity.z));
+            }
+            character.Move(direction * Time.fixedDeltaTime * (glidingSpeed + flyBackSpeed));
+                        if (flyBackSpeed < 0)
+            {
+                flyBackSpeed = flyBackSpeed + 0.1f;
+            }
+            */
+            character.Move(direction * Time.fixedDeltaTime * glidingSpeed);
+
+            if (glidingSpeed > 0)
+            {
+                glidingSpeed = glidingSpeed - 0.1f;
+                //glidingSpeed = Mathf.Lerp(glidingSpeed, 0, timer / 2f);
+            }
+
+
+
         }
         //isPressed ||
         if (RightControllerVelocity.y < -0.8)
         {
+            //device.SendHapticImpulse(channel, amplitude, duration);
             deviceRight.SendHapticImpulse(0, 0.8f, 0.1f);
-            Debug.Log("Right Text: " + RightControllerVelocity.y.ToString());
+            //Debug.Log("Right Text: " + RightControllerVelocity.y.ToString());
         }
         if (LeftControllerVelocity.y < -0.8)
         {
             deviceLeft.SendHapticImpulse(0, 0.8f, 0.1f);
-            Debug.Log("Left Text: " + LeftControllerVelocity.y.ToString());
+            //Debug.Log("Left Text: " + LeftControllerVelocity.y.ToString());
         }
         if (RightControllerVelocity.y<-0.8 && LeftControllerVelocity.y<-0.8)
         {
-            flapSpeed = -3.5f * (RightControllerVelocity.y + LeftControllerVelocity.y);
+            flapSpeed = - flapPower * (RightControllerVelocity.y + LeftControllerVelocity.y);
             fallingSpeed = 0;
-            //device.SendHapticImpulse(channel, amplitude, duration);
-            //debugText.SetText(RightControllerVelocity.ToString());
+            
         }
         if(flapSpeed > 0)
         {
@@ -119,6 +174,7 @@ public class PlayerMovement : MonoBehaviour
             fallingSpeed += gravity * Time.fixedDeltaTime; 
         }
         character.Move(Vector3.up * (fallingSpeed + flapSpeed) * Time.fixedDeltaTime);
+        
         //Debug.Log("Text: " + RightControllerVelocity.ToString());
     }
 
