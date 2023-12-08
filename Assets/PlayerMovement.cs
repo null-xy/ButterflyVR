@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviour
     //public float gravity = -9.81f;
     public float gravity = -2.81f;
     public float flapPower = 3.5f;
+    public float controllerSensitivity = 0.3f;
     // inputSource is the customized slot for devices
     public XRNode inputSourceLeft;
     public XRNode inputSourceRight;
@@ -34,6 +35,7 @@ public class PlayerMovement : MonoBehaviour
     private InputDevice deviceRight;
     //private float timer;
     private Vector3 direction;
+    private Vector3 onGroundDirection;
     //private Rigidbody m_Rigidbody;
 
     //private Rigidbody body;
@@ -73,11 +75,12 @@ public class PlayerMovement : MonoBehaviour
     {
         CapsuleFollowHeadset();
         Quaternion headYaw = Quaternion.Euler(0, rig.Camera.transform.eulerAngles.y, 0);
+        
         //Vector3 direction = headYaw * new Vector3(inputAxis.x, 0, inputAxis.y);
         //character.Move(direction * Time.fixedDeltaTime * speed);
         //Vector3 direction = headYaw * new Vector3(0, 0, -RightControllerVelocity.z);
         //character.Move(direction * Time.fixedDeltaTime * speed);
-        
+
         //timer += Time.deltaTime;
 
 
@@ -99,8 +102,9 @@ public class PlayerMovement : MonoBehaviour
         OnFlap();
 
         //fly with direction 
+        onGroundDirection = headYaw * new Vector3(inputAxis.x, 0, inputAxis.y);
+        character.Move(onGroundDirection * Time.fixedDeltaTime * speed);
 
-       
         //gravity
         bool isGround = IfGround();
         
@@ -109,32 +113,52 @@ public class PlayerMovement : MonoBehaviour
             fallingSpeed = 0f;
             glidingSpeed = 0f;
             flyBackSpeed = 0f;
+
         }
         if(!isGround)
         {
-            if (RightControllerVelocity.z < -0.3 && LeftControllerVelocity.z < -0.3 && RightControllerVelocity.y < -0.8 && LeftControllerVelocity.y < -0.8)
+            if (RightControllerVelocity.z < -controllerSensitivity && LeftControllerVelocity.z < -controllerSensitivity && RightControllerVelocity.y < -0.8 && LeftControllerVelocity.y < -0.8)
             {
                 glidingSpeed = 10f;
                 //m_Rigidbody.AddForce(transform.forward * 20f);
                 direction = headYaw * new Vector3(0, 0, -(RightControllerVelocity.z + LeftControllerVelocity.z));
+                direction.Normalize();
             }
             //fly back code, does not work properly
-            /*if (RightControllerVelocity.z > 0.3 && LeftControllerVelocity.z > 0.3 && RightControllerVelocity.y < -0.8 && LeftControllerVelocity.y < -0.8)
+            if (RightControllerVelocity.z > controllerSensitivity && LeftControllerVelocity.z > controllerSensitivity && RightControllerVelocity.y < -0.8 && LeftControllerVelocity.y < -0.8)
             {
-                flyBackSpeed = -5f;
+                glidingSpeed = 0f;
+                /*flyBackSpeed = -5f;
                 if (glidingSpeed <= 0)
                 {
                     direction = headYaw * new Vector3(0, 0, -(RightControllerVelocity.z + LeftControllerVelocity.z));
-                }
+                }*/
+
                 //m_Rigidbody.AddForce(transform.forward * 20f);
                 //direction = headYaw * new Vector3(0, 0, -(RightControllerVelocity.z + LeftControllerVelocity.z));
             }
-            character.Move(direction * Time.fixedDeltaTime * (glidingSpeed + flyBackSpeed));
-                        if (flyBackSpeed < 0)
+            if (RightControllerVelocity.y > -controllerSensitivity && RightControllerVelocity.y < controllerSensitivity && LeftControllerVelocity.y < -0.5)
+            {
+                transform.Rotate(0f, 150f * Time.fixedDeltaTime, 0f, Space.Self);
+            }
+            if (LeftControllerVelocity.y > -controllerSensitivity && LeftControllerVelocity.y < controllerSensitivity && RightControllerVelocity.y < -0.5)
+            {
+                transform.Rotate(0f, -150f * Time.fixedDeltaTime, 0f, Space.Self);
+            }
+
+
+            /*character.Move(direction * Time.fixedDeltaTime * (glidingSpeed + flyBackSpeed));
+            if (flyBackSpeed < 0)
             {
                 flyBackSpeed = flyBackSpeed + 0.1f;
             }
-            */
+
+            if (direction != Vector3.zero)
+            {
+                transform.forward = direction;
+            }*/
+
+            //transform.rotation = Quaternion.LookRotation(new )
             character.Move(direction * Time.fixedDeltaTime * glidingSpeed);
 
             if (glidingSpeed > 0)
