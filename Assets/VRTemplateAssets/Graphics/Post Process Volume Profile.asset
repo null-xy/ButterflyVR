@@ -119,16 +119,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdfbdbb87d3286943a057f7791b43141, type: 3}
   m_Name: ChannelMixer
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   redOutRedIn:
     m_OverrideState: 1
-    m_Value: 200
+    m_Value: -166
   redOutGreenIn:
     m_OverrideState: 1
-    m_Value: -44
+    m_Value: -5
   redOutBlueIn:
     m_OverrideState: 1
-    m_Value: 164
+    m_Value: 86
   greenOutRedIn:
     m_OverrideState: 0
     m_Value: 0
@@ -159,13 +159,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70afe9e12c7a7ed47911bb608a23a8ff, type: 3}
   m_Name: SplitToning
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   shadows:
     m_OverrideState: 1
-    m_Value: {r: 0.21568629, g: 0.627451, b: 0, a: 1}
+    m_Value: {r: 0.09734386, g: 0.5, b: 0, a: 1}
   highlights:
     m_OverrideState: 1
-    m_Value: {r: 0.9960785, g: 0.227451, b: 0.08627451, a: 1}
+    m_Value: {r: 0.6150436, g: 0.08627453, b: 0.99607843, a: 1}
   balance:
     m_OverrideState: 0
     m_Value: 0
@@ -234,22 +234,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66f335fb1ffd8684294ad653bf1c7564, type: 3}
   m_Name: ColorAdjustments
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   postExposure:
     m_OverrideState: 1
-    m_Value: 3.82
+    m_Value: 1.5
   contrast:
     m_OverrideState: 0
     m_Value: 0
   colorFilter:
     m_OverrideState: 1
-    m_Value: {r: 0.83967197, g: 0.7549226, b: 0.6931255, a: 1}
+    m_Value: {r: 1.1697519, g: 0.26912197, b: 2.7168503, a: 1}
   hueShift:
     m_OverrideState: 1
-    m_Value: -14
+    m_Value: -5
   saturation:
-    m_OverrideState: 0
-    m_Value: -19
+    m_OverrideState: 1
+    m_Value: -29
 --- !u!114 &8561070077442365294
 MonoBehaviour:
   m_ObjectHideFlags: 3
