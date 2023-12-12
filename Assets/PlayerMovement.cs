@@ -23,7 +23,7 @@ public class PlayerMovement : MonoBehaviour
     private float fallingSpeed;
     private float flapSpeed;
     private float glidingSpeed;
-    private float flyBackSpeed;
+    //private float flyBackSpeed;
     private XROrigin rig;
     private Vector2 inputAxis;
     private CharacterController character;
@@ -112,7 +112,7 @@ public class PlayerMovement : MonoBehaviour
         { 
             fallingSpeed = 0f;
             glidingSpeed = 0f;
-            flyBackSpeed = 0f;
+            //flyBackSpeed = 0f;
 
         }
         if(!isGround)
@@ -215,6 +215,7 @@ public class PlayerMovement : MonoBehaviour
         //cast a ray from character center to floor
         //groundLayer includes everthing in the layer of Ground(need config)
         Vector3 rayStart = transform.TransformPoint(character.center);
+        //float rayLength = character.center.y;
         float rayLength = character.center.y + 0.01f;
         bool hasHit = Physics.SphereCast(rayStart, character.radius, Vector3.down, out RaycastHit hitInfo, rayLength, groundLayer);
         return hasHit;
