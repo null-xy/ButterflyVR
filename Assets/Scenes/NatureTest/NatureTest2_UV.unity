@@ -9543,7 +9543,6 @@ Transform:
   - {fileID: 178049242}
   - {fileID: 2096335745}
   - {fileID: 1977689439}
-  - {fileID: 1394935534}
   m_Father: {fileID: 1477633017}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &591406084
@@ -20545,12 +20544,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7cd253a6637b4ed46954cf34aba42462, type: 3}
---- !u!4 &1394935534 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3605678714552062435, guid: 107776f1ba7eac34e919e34cfdaf8083,
-    type: 3}
-  m_PrefabInstance: {fileID: 1435586923}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1395770871 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6014058737199555822, guid: 029a438a1c9fa9f42aca194d882c553d,
@@ -21692,99 +21685,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: cc032f9003b806b4e93ef66b27d4faf7, type: 3}
---- !u!1001 &1435586923
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 588378505}
-    m_Modifications:
-    - target: {fileID: 1390535710733781654, guid: 107776f1ba7eac34e919e34cfdaf8083,
-        type: 3}
-      propertyPath: m_Materials.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3332198111309508980, guid: 107776f1ba7eac34e919e34cfdaf8083,
-        type: 3}
-      propertyPath: m_Name
-      value: SunShaft
-      objectReference: {fileID: 0}
-    - target: {fileID: 3605678714552062435, guid: 107776f1ba7eac34e919e34cfdaf8083,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 3605678714552062435, guid: 107776f1ba7eac34e919e34cfdaf8083,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 3605678714552062435, guid: 107776f1ba7eac34e919e34cfdaf8083,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 3605678714552062435, guid: 107776f1ba7eac34e919e34cfdaf8083,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 10.363182
-      objectReference: {fileID: 0}
-    - target: {fileID: 3605678714552062435, guid: 107776f1ba7eac34e919e34cfdaf8083,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 108.1311
-      objectReference: {fileID: 0}
-    - target: {fileID: 3605678714552062435, guid: 107776f1ba7eac34e919e34cfdaf8083,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -2.1697578
-      objectReference: {fileID: 0}
-    - target: {fileID: 3605678714552062435, guid: 107776f1ba7eac34e919e34cfdaf8083,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.90594876
-      objectReference: {fileID: 0}
-    - target: {fileID: 3605678714552062435, guid: 107776f1ba7eac34e919e34cfdaf8083,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.3871927
-      objectReference: {fileID: 0}
-    - target: {fileID: 3605678714552062435, guid: 107776f1ba7eac34e919e34cfdaf8083,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.15750377
-      objectReference: {fileID: 0}
-    - target: {fileID: 3605678714552062435, guid: 107776f1ba7eac34e919e34cfdaf8083,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0.06731545
-      objectReference: {fileID: 0}
-    - target: {fileID: 3605678714552062435, guid: 107776f1ba7eac34e919e34cfdaf8083,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: -46.283
-      objectReference: {fileID: 0}
-    - target: {fileID: 3605678714552062435, guid: 107776f1ba7eac34e919e34cfdaf8083,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -19.725
-      objectReference: {fileID: 0}
-    - target: {fileID: 3605678714552062435, guid: 107776f1ba7eac34e919e34cfdaf8083,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3605678714552062435, guid: 107776f1ba7eac34e919e34cfdaf8083,
-        type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 107776f1ba7eac34e919e34cfdaf8083, type: 3}
 --- !u!4 &1450607923 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2590482203587453314, guid: c2ee4cecb7ad921409a71f6b767731f8,

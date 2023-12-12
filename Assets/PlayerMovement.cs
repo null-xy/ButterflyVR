@@ -65,9 +65,12 @@ public class PlayerMovement : MonoBehaviour
     /// </CharacterController>
     private CharacterController character;
     /// <bool>
-    ///  Property <c>isPressed/c> to check if the primary button on the left controlleris pressed.
+    ///  Property <c>isPressed/c> to check if the corresponding button on the corresponding controlleris pressed.
     /// </bool>
-    private bool isPressed;
+    private bool leftAisPressed;
+    private bool leftBisPressed;
+    private bool rightAisPressed;
+    private bool rightBisPressed;
     /// <Vector3>
     ///  Property <c>LeftControllerVelocity</c> and <c>RightControllerVelocity</c> 
     ///  represents the velocity of the left and right controllers.
@@ -115,7 +118,10 @@ public class PlayerMovement : MonoBehaviour
         deviceRight = InputDevices.GetDeviceAtXRNode(inputSourceRight);
         ///InputDevice deviceHead = InputDevices.GetDeviceAtXRNode(inputSourceHeadset);
         deviceLeft.TryGetFeatureValue(CommonUsages.primary2DAxis, out inputAxis);
-        deviceLeft.TryGetFeatureValue(CommonUsages.primaryButton, out isPressed);
+        deviceLeft.TryGetFeatureValue(CommonUsages.primaryButton, out leftAisPressed);
+        deviceLeft.TryGetFeatureValue(CommonUsages.secondaryButton, out leftBisPressed);
+        deviceRight.TryGetFeatureValue(CommonUsages.primaryButton, out rightAisPressed);
+        deviceRight.TryGetFeatureValue(CommonUsages.secondaryButton, out rightBisPressed);
         ///get input device controller Velocity in vector 3
         deviceLeft.TryGetFeatureValue(CommonUsages.deviceVelocity, out LeftControllerVelocity);
         deviceRight.TryGetFeatureValue(CommonUsages.deviceVelocity, out RightControllerVelocity);
@@ -139,10 +145,22 @@ public class PlayerMovement : MonoBehaviour
         //character.Move(direction * Time.fixedDeltaTime * speed);
 
         //timer += Time.deltaTime;
-
-        if (isPressed)
+        ///LoadScene by press different Scene
+        if (leftAisPressed)
+        {
+            SceneManager.LoadScene("NatureTest2_noUV");
+        }
+        else if(leftBisPressed)
         {
             SceneManager.LoadScene("NatureTest2_UV");
+        }
+        else if (rightAisPressed)
+        {
+            SceneManager.LoadScene("NatureTest2_FOV");
+        }
+        else if (rightBisPressed)
+        {
+            SceneManager.LoadScene("NatureTest2_pixelation");
         }
         /*
          * fly backward, currently not in use.
